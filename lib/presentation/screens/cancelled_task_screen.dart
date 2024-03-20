@@ -42,7 +42,7 @@ class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
             },
             child: Visibility(
               visible: _cancelledTaskListWrapper.taskList?.isNotEmpty ?? false,
-              replacement: EmptyListWidget(refreshList: _getAllCancelledTaskList),
+              replacement: const EmptyListWidget(),
               child: ListView.builder(
                 itemCount: _cancelledTaskListWrapper.taskList?.length ?? 0,
                 itemBuilder: (context, index) {

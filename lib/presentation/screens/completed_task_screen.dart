@@ -41,7 +41,7 @@ class _CompleteTaskScreenState extends State<CompleteTaskScreen> {
             },
             child: Visibility(
               visible: _completedTaskListWrapper.taskList?.isNotEmpty ?? false,
-              replacement: EmptyListWidget(refreshList: _getAllCompletedTaskList),
+              replacement: const EmptyListWidget(),
               child: ListView.builder(
                 itemCount: _completedTaskListWrapper.taskList?.length ?? 0,
                 itemBuilder: (context, index) {

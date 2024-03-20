@@ -62,7 +62,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   },
                   child: Visibility(
                     visible: _newTaskListWrapper.taskList?.isNotEmpty ?? false,
-                    replacement: EmptyListWidget(refreshList: () { _getDataFromApi(); },),
+                    replacement: const EmptyListWidget(),
                     child: ListView.builder(
                       itemCount: _newTaskListWrapper.taskList?.length ?? 0,
                       itemBuilder: (context, index) {

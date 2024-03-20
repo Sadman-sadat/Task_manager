@@ -41,7 +41,7 @@ class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
             },
             child: Visibility(
               visible: _progressTaskListWrapper.taskList?.isNotEmpty ?? false,
-              replacement: EmptyListWidget(refreshList: _getAllProgressTaskList),
+              replacement: const EmptyListWidget(),
               child: ListView.builder(
                 itemCount: _progressTaskListWrapper.taskList?.length ?? 0,
                 itemBuilder: (context, index) {

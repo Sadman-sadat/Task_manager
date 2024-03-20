@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 
-class EmptyListWidget extends StatefulWidget {
+class EmptyListWidget extends StatelessWidget {
   const EmptyListWidget({
-    super.key, required this.refreshList,
+    super.key,
   });
-
-  final VoidCallback refreshList;
-
-  @override
-  State<EmptyListWidget> createState() => _EmptyListWidgetState();
-}
-
-class _EmptyListWidgetState extends State<EmptyListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text('No Items'),
-          IconButton(onPressed: widget.refreshList, icon: const Icon(Icons.refresh),),
-        ],
+    return SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      child: Center(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: const Center(
+            child: Text(
+              'No items',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ),
+        ),
       ),
     );
   }
