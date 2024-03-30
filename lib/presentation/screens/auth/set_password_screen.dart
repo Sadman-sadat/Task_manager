@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:task_manager/data/services/network_caller.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/controllers/auth/set_password_controller.dart';
 import 'package:task_manager/presentation/screens/auth/sign_in_screen.dart';
-import '../../../data/utility/urls.dart';
-import '../../widgets/background_wallpaper.dart';
-import '../../widgets/snack_bar_message.dart';
-import 'pin_verification_screen.dart';
+import 'package:task_manager/presentation/widgets/background_wallpaper.dart';
+import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
 
 class SetPasswordScreen extends StatefulWidget {
   const SetPasswordScreen({super.key, required this.email, required this.otp});
@@ -22,7 +20,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _confirmPasswordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _passwordVerificationInProgress = false;
+  final SetPasswordController _setPasswordController = Get.find<SetPasswordController>();
 
   @override
   Widget build(BuildContext context) {
@@ -85,18 +83,22 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                   const SizedBox(height: 16),
                   SizedBox(
                       width: double.infinity,
-                      child: Visibility(
-                        visible: _passwordVerificationInProgress == false,
-                        replacement: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        child: ElevatedButton(
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()){
-                                await _setNewPasswordVerification();
-                              }
-                            },
-                            child: const Text("Confirm")),
+                      child: GetBuilder<SetPasswordController>(
+                        builder: (setPasswordController) {
+                          return Visibility(
+                            visible: _setPasswordController.inProgress == false,
+                            replacement: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()){
+                                    await _setNewPasswordVerification();
+                                  }
+                                },
+                                child: const Text("Confirm")),
+                          );
+                        }
                       )),
                   const SizedBox(height: 32),
                   Row(
@@ -130,33 +132,21 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
   }
 
   Future<void> _setNewPasswordVerification() async {
-    _passwordVerificationInProgress = true;
-    setState(() {});
-
-    final userNewPassword = _passwordTEController.text;
     final userEmail = widget.email;
     final userOtp = widget.otp;
+    final userNewPassword = _passwordTEController.text;
 
-    Map<String, dynamic> inputParams = {
-      "email": userEmail,
-      "OTP": userOtp,
-      "password": userNewPassword,
-    };
+    final result = await _setPasswordController.setPassword(userEmail, userOtp, userNewPassword);
 
-    final response = await NetworkCaller.postRequest(Urls.resetPassword, inputParams);
-
-    _passwordVerificationInProgress = false;
-    setState(() {});
-    if (response.isSuccess) {
+    if (result) {
       if (mounted) {
-        showSnackBarMessage(context, "Password Reset! Please Sign in");
+        showSnackBarMessage(context, _setPasswordController.successMessage);
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const SignInScreen() ), (route) => false);
       }
     } else {
       if (mounted) {
-        showSnackBarMessage(context, 'Password Reset Failed! Try again', true);
+        showSnackBarMessage(context, _setPasswordController.errorMessage, true);
       }
-      setState(() {});
     }
   }
 

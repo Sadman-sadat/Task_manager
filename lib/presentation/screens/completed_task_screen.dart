@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/controllers/completed_task_controller.dart';
 import 'package:task_manager/presentation/widgets/background_wallpaper.dart';
-import '../../data/models/task_list_wrapper.dart';
-import '../../data/services/network_caller.dart';
-import '../../data/utility/urls.dart';
-import '../widgets/empty_list_widget.dart';
-import '../widgets/profile_app_bar.dart';
-import '../widgets/snack_bar_message.dart';
-import '../widgets/task_card.dart';
+import 'package:task_manager/presentation/widgets/empty_list_widget.dart';
+import 'package:task_manager/presentation/widgets/profile_app_bar.dart';
+import 'package:task_manager/presentation/widgets/task_card.dart';
 
 class CompleteTaskScreen extends StatefulWidget {
   const CompleteTaskScreen({super.key});
@@ -16,68 +14,51 @@ class CompleteTaskScreen extends StatefulWidget {
 }
 
 class _CompleteTaskScreenState extends State<CompleteTaskScreen> {
-  bool _getAllCompletedTaskListInProgress = false;
-  TaskListWrapper _completedTaskListWrapper = TaskListWrapper();
+
+  final CompletedTaskController _completedTaskController = Get.find<CompletedTaskController>();
 
   @override
   void initState() {
     super.initState();
-    _getAllCompletedTaskList();
+    _completedTaskController.getCompletedTaskList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ProfileAppBar,
+      appBar: profileAppBar,
       body: BackgroundWidget(
-        child: Visibility(
-          visible: _getAllCompletedTaskListInProgress == false,
-          replacement: const Center(
-            child: CircularProgressIndicator(),
-          ),
-          child: RefreshIndicator(
-            onRefresh: () async {
-              _getAllCompletedTaskList();
-            },
-            child: Visibility(
-              visible: _completedTaskListWrapper.taskList?.isNotEmpty ?? false,
-              replacement: const EmptyListWidget(),
-              child: ListView.builder(
-                itemCount: _completedTaskListWrapper.taskList?.length ?? 0,
-                itemBuilder: (context, index) {
-                  return TaskCard(
-                    taskItem: _completedTaskListWrapper.taskList![index],
-                    refreshList: () {
-                      _getAllCompletedTaskList();
-                    },
-                  );
-                },
+        child: GetBuilder<CompletedTaskController>(
+          builder: (completedTaskController) {
+            return Visibility(
+              visible: completedTaskController.inProgress == false,
+              replacement: const Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          ),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  _completedTaskController.getCompletedTaskList();
+                },
+                child: Visibility(
+                  visible: completedTaskController.completedTaskListWrapper.taskList?.isNotEmpty ?? false,
+                  replacement: const EmptyListWidget(),
+                  child: ListView.builder(
+                    itemCount: completedTaskController.completedTaskListWrapper.taskList?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return TaskCard(
+                        taskItem: completedTaskController.completedTaskListWrapper.taskList![index],
+                        refreshList: () {
+                          _completedTaskController.getCompletedTaskList();
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          }
         ),
       ),
     );
-  }
-
-  Future<void> _getAllCompletedTaskList() async {
-    _getAllCompletedTaskListInProgress = true;
-    setState(() {});
-    final response = await NetworkCaller.getRequest(Urls.completedTaskList);
-    if (response.isSuccess) {
-      _completedTaskListWrapper =
-          TaskListWrapper.fromJson(response.responseBody);
-      _getAllCompletedTaskListInProgress = false;
-      setState(() {});
-    } else {
-      _getAllCompletedTaskListInProgress = false;
-      setState(() {});
-      if (mounted) {
-        showSnackBarMessage(
-            context,
-            response.errorMessage ??
-                'Get Completed task list has been failed!');
-      }
-    }
   }
 }

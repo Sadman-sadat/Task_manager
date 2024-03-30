@@ -1,13 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:task_manager/app.dart';
 import 'package:task_manager/presentation/controllers/auth_controller.dart';
 import 'package:task_manager/presentation/screens/auth/sign_in_screen.dart';
 import 'package:task_manager/presentation/screens/update_profile_screen.dart';
-import '../utility/app_colors.dart';
+import 'package:task_manager/presentation/utility/app_colors.dart';
 
-PreferredSizeWidget get ProfileAppBar{
+PreferredSizeWidget get profileAppBar{
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: AppColors.themeColor,
@@ -18,7 +17,7 @@ PreferredSizeWidget get ProfileAppBar{
       child: Row(
         children: [
           CircleAvatar(
-            backgroundImage: MemoryImage(base64Decode(AuthController.userData!.photo!)),
+            backgroundImage: MemoryImage(base64Decode(AuthController.userData?.photo??"")),
           ),
           const SizedBox(width: 12),
           Expanded(

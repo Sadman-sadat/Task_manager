@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:task_manager/data/models/task_item.dart';
 import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
 
-import '../../data/services/network_caller.dart';
-import '../../data/utility/urls.dart';
+import 'package:task_manager/data/services/network_caller.dart';
+import 'package:task_manager/data/utility/urls.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({

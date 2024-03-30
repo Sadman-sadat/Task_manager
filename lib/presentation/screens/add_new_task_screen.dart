@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:task_manager/data/services/network_caller.dart';
-import 'package:task_manager/data/utility/urls.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/controllers/add_new_task_controller.dart';
 import 'package:task_manager/presentation/widgets/background_wallpaper.dart';
 import 'package:task_manager/presentation/widgets/profile_app_bar.dart';
 import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
@@ -18,9 +17,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _descriptionTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _addNewTaskInProgress = false;
-  bool _shouldRefreshNewTaskList = false;
+  final AddNewTaskController _addNewTaskController = Get.find<AddNewTaskController>();
 
+  final bool _shouldRefreshNewTaskList = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         Navigator.pop(context, _shouldRefreshNewTaskList);
       },
       child: Scaffold(
-        appBar: ProfileAppBar,
+        appBar: profileAppBar,
         body: BackgroundWidget(
           child: SingleChildScrollView(
             child: Padding(
@@ -77,18 +76,22 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                     const SizedBox(height: 8),
                     SizedBox(
                       width: double.infinity,
-                      child: Visibility(
-                        visible: _addNewTaskInProgress == false,
-                        replacement: const Center(child: CircularProgressIndicator(),),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _addNewTask();
-                            }
-                            //Navigator.pop(context);
-                          },
-                          child: const Icon(Icons.arrow_circle_right_outlined),
-                        ),
+                      child: GetBuilder<AddNewTaskController>(
+                        builder: (addNewTaskController) {
+                          return Visibility(
+                            visible: addNewTaskController.inProgress == false,
+                            replacement: const Center(child: CircularProgressIndicator(),),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _addNewTask();
+                                }
+                                //Navigator.pop(context);
+                              },
+                              child: const Icon(Icons.arrow_circle_right_outlined),
+                            ),
+                          );
+                        }
                       ),
                     ),
                   ],
@@ -102,33 +105,19 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   }
 
   Future<void> _addNewTask() async {
-    _addNewTaskInProgress = true;
-    setState(() {});
+    final result = await _addNewTaskController.addNewTask(_titleTEController.text, _descriptionTEController.text);
 
-    Map<String, dynamic> inputParams = {
-      "title": _titleTEController.text.trim(),
-      "description": _descriptionTEController.text.trim(),
-      "status": "New"
-    };
-
-    final response =
-        await NetworkCaller.postRequest(Urls.createTask, inputParams);
-
-    _addNewTaskInProgress = false;
-    setState(() {});
-
-    if (response.isSuccess) {
-      _shouldRefreshNewTaskList = true;
+    if (result) {
       _titleTEController.clear();
       _descriptionTEController.clear();
       if (mounted) {
         showSnackBarMessage(
-            context, response.errorMessage ?? 'New Task has been added!');
+            context, _addNewTaskController.successMessage);
       }
     } else {
       if (mounted) {
         showSnackBarMessage(
-            context, response.errorMessage ?? 'Add New Task Failed!', true);
+            context, _addNewTaskController.errorMessage, true);
       }
     }
   }

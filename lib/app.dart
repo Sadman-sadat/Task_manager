@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/controller_binder.dart';
 import 'package:task_manager/presentation/screens/splash_screen.dart';
-import 'package:task_manager/presentation/utility/app_colors.dart';
+import 'package:task_manager/presentation/utility/app_theme.dart';
+import 'package:get/get.dart';
 
 class TaskManager extends StatefulWidget {
   const TaskManager({super.key});
@@ -14,48 +16,14 @@ class TaskManager extends StatefulWidget {
 class _TaskManagerState extends State<TaskManager> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       navigatorKey: TaskManager.navigatorKey,
       title: 'Task Manager',
-      theme: ThemeData(
-        inputDecorationTheme: InputDecorationTheme(
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(8),
-            )
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            backgroundColor: AppColors.themeColor,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          )
-        ),
-        textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-                foregroundColor: AppColors.themeColor,
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                )),
-            ),
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
-        ),
-        chipTheme: ChipThemeData(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50)
-          )
-        )
-      ),
+      theme: appThemeData(),
       debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
+      initialBinding: ControllerBinder(),
     );
   }
 }
+

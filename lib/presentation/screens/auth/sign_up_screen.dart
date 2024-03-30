@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager/data/services/network_caller.dart';
-import 'package:task_manager/data/utility/urls.dart';
+import 'package:get/get.dart';
+import 'package:task_manager/presentation/controllers/auth/sign_up_controller.dart';
 import 'package:task_manager/presentation/widgets/background_wallpaper.dart';
 import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
-
-import '../../../data/models/response_object.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -21,7 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _mobileTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
 
-  bool _isRegistrationInProgress = false;
+  final SignUpController _signUpController = Get.find<SignUpController>();
 
   @override
   Widget build(BuildContext context) {
@@ -114,18 +112,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
-                    child: Visibility(
-                      visible: _isRegistrationInProgress == false,
-                      replacement: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              _signUp();
-                            }
-                          },
-                          child: const Icon(Icons.arrow_circle_right_outlined),),
+                    child: GetBuilder<SignUpController>(
+                      builder: (signUpController) {
+                        return Visibility(
+                          visible: signUpController.inProgress == false,
+                          replacement: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          child: ElevatedButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  _signUp();
+                                }
+                              },
+                              child: const Icon(Icons.arrow_circle_right_outlined),),
+                        );
+                      }
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -160,29 +162,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _signUp() async {
-    _isRegistrationInProgress = true;
-    setState(() {});
-    Map<String, dynamic> inputParams = {
-      "email": _emailTEController.text.trim(),
-      "firstName": _firstNameTEController.text.trim(),
-      "lastName": _lastNameTEController.text.trim(),
-      "mobile": _mobileTEController.text.trim(),
-      "password": _passwordTEController.text,
-    };
-    final ResponseObject response =
-        await NetworkCaller.postRequest(Urls.registration, inputParams);
+    final result = await _signUpController.signUp(
+        _emailTEController.text.trim(),
+        _firstNameTEController.text.trim(),
+        _lastNameTEController.text.trim(),
+        _mobileTEController.text.trim(),
+        _passwordTEController.text
+    );
 
-    _isRegistrationInProgress = true;
-    setState(() {});
-
-    if (response.isSuccess) {
+    if (result) {
       if (mounted) {
-        showSnackBarMessage(context, "Registration Completed! Please Sign in");
+        showSnackBarMessage(context, _signUpController.successMessage);
         Navigator.pop(context);
       }
     } else {
       if (mounted) {
-        showSnackBarMessage(context, 'Registration Failed! Try again', true);
+        showSnackBarMessage(context, _signUpController.errorMessage, true);
       }
     }
   }

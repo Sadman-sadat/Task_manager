@@ -1,4 +1,4 @@
-import 'task_item.dart';
+import 'package:task_manager/data/models/task_item.dart';
 
 class TaskListWrapper {
   String? status;
