@@ -113,11 +113,10 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
                         onPressed: () {},
                         child: TextButton(
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignInScreen()),
-                                (route) => false);
+                            Get.offUntil(
+                              MaterialPageRoute(builder: (context) => const SignInScreen()),
+                                  (route) => false,
+                            );
                           },
                           child: const Text('Sign In'),
                         ),
@@ -139,11 +138,8 @@ class _PinVerificationScreenState extends State<PinVerificationScreen> {
 
     if(result){
       if(mounted){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => SetPasswordScreen(email: _pinVerificationController.email, otp: _pinVerificationController.otp),
-          ),
+        Get.to(
+              () => SetPasswordScreen(email: _pinVerificationController.email, otp: _pinVerificationController.otp),
         );
       }
     } else {

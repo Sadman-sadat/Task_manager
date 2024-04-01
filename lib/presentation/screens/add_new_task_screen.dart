@@ -17,9 +17,9 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _descriptionTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final AddNewTaskController _addNewTaskController = Get.find<AddNewTaskController>();
+  late final AddNewTaskController _addNewTaskController = Get.find<AddNewTaskController>();
 
-  final bool _shouldRefreshNewTaskList = false;
+  bool _shouldRefreshNewTaskList = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
         if(didPop) {
          return;
         }
-        Navigator.pop(context, _shouldRefreshNewTaskList);
+        Get.back(result: _shouldRefreshNewTaskList);
       },
       child: Scaffold(
         appBar: profileAppBar,
@@ -86,7 +86,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                                 if (_formKey.currentState!.validate()) {
                                   _addNewTask();
                                 }
-                                //Navigator.pop(context);
                               },
                               child: const Icon(Icons.arrow_circle_right_outlined),
                             ),
@@ -108,6 +107,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     final result = await _addNewTaskController.addNewTask(_titleTEController.text, _descriptionTEController.text);
 
     if (result) {
+      _shouldRefreshNewTaskList = true;
       _titleTEController.clear();
       _descriptionTEController.clear();
       if (mounted) {

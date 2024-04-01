@@ -34,6 +34,11 @@ class UpdateProfileController extends GetxController{
       List<int> bytes = await photoFile.readAsBytes();
       photoPath = base64Encode(bytes);
       inputParams['photo'] = photoPath;
+    } else {
+      final userData = await AuthController.getUserData();
+      if (userData?.photo != null) {
+        inputParams['photo'] = userData?.photo;
+      }
     }
 
     final response = await NetworkCaller.postRequest(Urls.updateProfile, inputParams);
@@ -46,7 +51,6 @@ class UpdateProfileController extends GetxController{
           lastName: inputParams['lastName'],
           mobile: inputParams['mobile'],
           photo: inputParams['photo'],
-          //photo: photoPath,
         );
         await AuthController.saveUserData(userData);
       }

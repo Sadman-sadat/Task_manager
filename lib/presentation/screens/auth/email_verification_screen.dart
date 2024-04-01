@@ -16,7 +16,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final EmailVerificationController _emailVerificationController = Get.find<EmailVerificationController>();
+  late final EmailVerificationController _emailVerificationController = Get.find<EmailVerificationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +92,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         onPressed: () {},
                         child: TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                           child: const Text('Sign In'),
                         ),
@@ -112,12 +112,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     final result = await _emailVerificationController.emailVerify(_emailTEController.text.trim());
       if (result) {
         if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PinVerificationScreen(email: _emailVerificationController.email),
-            ),
-          );
+          Get.to(() => PinVerificationScreen(email: _emailVerificationController.email));
         }
       } else {
         if (mounted) {

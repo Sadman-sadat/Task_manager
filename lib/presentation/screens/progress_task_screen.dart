@@ -15,7 +15,7 @@ class ProgressTaskScreen extends StatefulWidget {
 
 class _ProgressTaskScreenState extends State<ProgressTaskScreen> {
 
-  final ProgressTaskController _progressTaskController = Get.find<ProgressTaskController>();
+  late final ProgressTaskController _progressTaskController = Get.find<ProgressTaskController>();
 
   @override
   void initState() {

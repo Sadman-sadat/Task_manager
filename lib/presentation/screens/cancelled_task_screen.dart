@@ -14,7 +14,7 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
-  final CancelledTaskController _cancelledTaskController = Get.find<CancelledTaskController>();
+  late final CancelledTaskController _cancelledTaskController = Get.find<CancelledTaskController>();
 
   @override
   void initState() {

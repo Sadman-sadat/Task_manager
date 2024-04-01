@@ -19,7 +19,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _mobileTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
 
-  final SignUpController _signUpController = Get.find<SignUpController>();
+  late final SignUpController _signUpController = Get.find<SignUpController>();
 
   @override
   Widget build(BuildContext context) {
@@ -113,22 +113,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: GetBuilder<SignUpController>(
-                      builder: (signUpController) {
-                        return Visibility(
-                          visible: signUpController.inProgress == false,
-                          replacement: const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                          child: ElevatedButton(
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  _signUp();
-                                }
-                              },
-                              child: const Icon(Icons.arrow_circle_right_outlined),),
-                        );
-                      }
-                    ),
+                        builder: (signUpController) {
+                      return Visibility(
+                        visible: signUpController.inProgress == false,
+                        replacement: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _signUp();
+                            }
+                          },
+                          child: const Icon(Icons.arrow_circle_right_outlined),
+                        ),
+                      );
+                    }),
                   ),
                   const SizedBox(height: 32),
                   Row(
@@ -145,7 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: () {},
                         child: TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                           child: const Text('Sign In'),
                         ),
@@ -167,13 +167,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _firstNameTEController.text.trim(),
         _lastNameTEController.text.trim(),
         _mobileTEController.text.trim(),
-        _passwordTEController.text
-    );
+        _passwordTEController.text);
 
     if (result) {
       if (mounted) {
         showSnackBarMessage(context, _signUpController.successMessage);
-        Navigator.pop(context);
+        Get.back();
       }
     } else {
       if (mounted) {
@@ -184,11 +183,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void dispose() {
+    super.dispose();
     _emailTEController.dispose();
     _firstNameTEController.dispose();
     _lastNameTEController.dispose();
     _mobileTEController.dispose();
     _passwordTEController.dispose();
-    super.dispose();
   }
 }

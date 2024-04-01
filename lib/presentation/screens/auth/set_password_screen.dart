@@ -115,7 +115,7 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
                         onPressed: () {},
                         child: TextButton(
                           onPressed: () {
-                            Navigator.pop(context);
+                            Get.back();
                           },
                           child: const Text('Sign In'),
                         ),
@@ -141,7 +141,10 @@ class _SetPasswordScreenState extends State<SetPasswordScreen> {
     if (result) {
       if (mounted) {
         showSnackBarMessage(context, _setPasswordController.successMessage);
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const SignInScreen() ), (route) => false);
+        Get.offUntil(
+          MaterialPageRoute(builder: (context) => const SignInScreen()),
+              (route) => false,
+        );
       }
     } else {
       if (mounted) {

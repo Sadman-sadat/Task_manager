@@ -15,7 +15,7 @@ class CompleteTaskScreen extends StatefulWidget {
 
 class _CompleteTaskScreenState extends State<CompleteTaskScreen> {
 
-  final CompletedTaskController _completedTaskController = Get.find<CompletedTaskController>();
+  late final CompletedTaskController _completedTaskController = Get.find<CompletedTaskController>();
 
   @override
   void initState() {

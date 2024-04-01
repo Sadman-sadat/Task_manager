@@ -19,15 +19,21 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
+  late final CountTaskByStatusController countTaskByStatusController = Get.find<CountTaskByStatusController>();
+  late final NewTaskController newTaskController= Get.find<NewTaskController>();
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    _getDataFromApi();
+    });
     _getDataFromApi();
     super.initState();
   }
 
   void _getDataFromApi() {
-    Get.find<CountTaskByStatusController>().getCountTaskByStatus();
-    Get.find<NewTaskController>().getNewTaskList();
+    countTaskByStatusController.getCountTaskByStatus();
+    newTaskController.getNewTaskList();
   }
 
   @override
@@ -67,6 +73,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           itemCount: newTaskController.newTaskListWrapper.taskList?.length ?? 0,
                           itemBuilder: (context, index) {
                             return TaskCard(
+                              key: UniqueKey(),
                               taskItem: newTaskController.newTaskListWrapper.taskList![index],
                               refreshList: () {
                                 _getDataFromApi();
@@ -85,12 +92,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddNewTaskScreen(),
-            ),
-          );
+          final result = await Get.to(()=>const AddNewTaskScreen());
           if (result != null && result == true){
             _getDataFromApi();
           }

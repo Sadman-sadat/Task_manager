@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:task_manager/presentation/controllers/UpdateProfileController.dart';
+import 'package:task_manager/presentation/controllers/update_profile_controller.dart';
 import 'package:task_manager/presentation/controllers/auth_controller.dart';
 import 'package:task_manager/presentation/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager/presentation/widgets/background_wallpaper.dart';
@@ -25,7 +25,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
   XFile? _pickedImage;
 
-  final UpdateProfileController _updateProfileController = Get.find<UpdateProfileController>();
+  late final UpdateProfileController _updateProfileController = Get.find<UpdateProfileController>();
 
   @override
   void initState() {
@@ -192,9 +192,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
     if(result){
       if(mounted) {
-        Navigator.pushAndRemoveUntil(context,
-            MaterialPageRoute(builder: (context) => const MainBottomNavScreen()), (
-                route) => false);
+        Get.to(()=>const MainBottomNavScreen());
       }
     } else {
       if(mounted) {

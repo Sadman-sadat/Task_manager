@@ -19,7 +19,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
 
-  final SignInController _signInController = Get.find<SignInController>();
+  late final SignInController _signInController = Get.find<SignInController>();
 
   @override
   Widget build(BuildContext context) {
@@ -100,13 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             fontSize: 16,
                           )),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                const EmailVerificationScreen(),
-                          ),
-                        );
+                        Get.to(() =>const EmailVerificationScreen());
                       },
                       child: const Text('Forgot Password'),
                     ),
@@ -125,12 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         onPressed: () {},
                         child: TextButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SignUpScreen(),
-                              ),
-                            );
+                            Get.to(() =>const SignUpScreen());
                           },
                           child: const Text('Sign Up'),
                         ),
@@ -149,15 +138,9 @@ class _SignInScreenState extends State<SignInScreen> {
   Future<void> _signIn() async {
     final result = await _signInController.signIn(
         _emailTEController.text.trim(), _passwordTEController.text);
-
     if (result) {
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MainBottomNavScreen(),
-            ),
-            (route) => false);
+        Get.to(() =>const MainBottomNavScreen());
       }
     } else {
       if (mounted) {

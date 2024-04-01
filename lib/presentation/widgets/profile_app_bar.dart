@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:task_manager/app.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/presentation/controllers/auth_controller.dart';
 import 'package:task_manager/presentation/screens/auth/sign_in_screen.dart';
 import 'package:task_manager/presentation/screens/update_profile_screen.dart';
@@ -12,7 +12,7 @@ PreferredSizeWidget get profileAppBar{
     backgroundColor: AppColors.themeColor,
     title: GestureDetector(
       onTap: () {
-        Navigator.push(TaskManager.navigatorKey.currentContext!, MaterialPageRoute(builder: (context) => const UpdateProfileScreen(),),);
+        Get.to(() => const UpdateProfileScreen());
       },
       child: Row(
         children: [
@@ -38,7 +38,7 @@ PreferredSizeWidget get profileAppBar{
           ),
           IconButton(onPressed: () async {
             await AuthController.clearUserData();
-            Navigator.pushAndRemoveUntil(TaskManager.navigatorKey.currentContext!, MaterialPageRoute(builder: (context) => const SignInScreen()), (route) => false);
+            Get.offAll(() => const SignInScreen());
           }, icon: const Icon(Icons.logout, color: Colors.white,)),
         ],
       ),
