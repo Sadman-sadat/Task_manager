@@ -25,7 +25,7 @@ class TaskCounterCard extends StatelessWidget {
               ),
             ),
             Text(
-              '$title',
+              title,
               style: const TextStyle(color: Colors.grey),
             ),
           ],

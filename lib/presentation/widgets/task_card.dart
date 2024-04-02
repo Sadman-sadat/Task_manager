@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_manager/data/models/task_item.dart';
-import 'package:task_manager/presentation/controllers/delete_task_card_controller.dart';
-import 'package:task_manager/presentation/controllers/update_task_card_controller.dart';
+import 'package:task_manager/presentation/controllers/widgets/delete_task_card_controller.dart';
+import 'package:task_manager/presentation/controllers/widgets/update_task_card_controller.dart';
 import 'package:task_manager/presentation/widgets/snack_bar_message.dart';
 
 class TaskCard extends StatefulWidget {

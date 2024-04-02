@@ -6,13 +6,13 @@ import 'package:task_manager/presentation/controllers/auth/pin_verification_cont
 import 'package:task_manager/presentation/controllers/auth/set_password_controller.dart';
 import 'package:task_manager/presentation/controllers/cancelled_task_controller.dart';
 import 'package:task_manager/presentation/controllers/completed_task_controller.dart';
-import 'package:task_manager/presentation/controllers/count_task_by_status_controller.dart';
-import 'package:task_manager/presentation/controllers/delete_task_card_controller.dart';
+import 'package:task_manager/presentation/controllers/widgets/count_task_by_status_controller.dart';
+import 'package:task_manager/presentation/controllers/widgets/delete_task_card_controller.dart';
 import 'package:task_manager/presentation/controllers/new_task_controller.dart';
 import 'package:task_manager/presentation/controllers/progress_task_controller.dart';
 import 'package:task_manager/presentation/controllers/auth/sign_in_controller.dart';
 import 'package:task_manager/presentation/controllers/auth/sign_up_controller.dart';
-import 'package:task_manager/presentation/controllers/update_task_card_controller.dart';
+import 'package:task_manager/presentation/controllers/widgets/update_task_card_controller.dart';
 
 class ControllerBinder extends Bindings {
   @override
