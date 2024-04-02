@@ -70,63 +70,36 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void _showUpdateStatusDialog(String id) {
+    List<String> statusOptions = ['New', 'Completed', 'Progress', 'Cancelled'];
+
     showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Select Status'),
-            content: Column(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Select Status'),
+          content: SingleChildScrollView(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: const Text('New'),
-                  trailing: _isCurrentStatus('New') ? const Icon(Icons.check) : null,
-                  onTap: (){
-                    if(_isCurrentStatus('New')){
+              children: statusOptions.map((status) {
+                return ListTile(
+                  title: Text(status),
+                  trailing: _isCurrentStatus(status) ? const Icon(Icons.check) : null,
+                  onTap: () {
+                    if (_isCurrentStatus(status)) {
                       return;
                     }
-                    _updateTaskById(id, 'New');
+                    _updateTaskById(id, status);
                     Navigator.pop(context);
                   },
-                ),
-                ListTile(
-                  title: const Text('Completed'),
-                  trailing: _isCurrentStatus('Completed') ? const Icon(Icons.check) : null,
-                  onTap: (){
-                    if(_isCurrentStatus('Completed')){
-                      return;
-                    }
-                    _updateTaskById(id, 'Completed');
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text('Progress'),
-                  trailing: _isCurrentStatus('Progress') ? const Icon(Icons.check) : null,
-                  onTap: (){
-                    if(_isCurrentStatus('Progress')){
-                      return;
-                    }
-                    _updateTaskById(id, 'Progress');
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  title: const Text('Cancelled'),
-                  trailing: _isCurrentStatus('Cancelled') ? const Icon(Icons.check) : null,
-                  onTap: (){
-                    if(_isCurrentStatus('Cancelled')){
-                      return;
-                    }
-                    _updateTaskById(id, 'Cancelled');
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
+                );
+              }).toList(),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
+
 
   bool _isCurrentStatus(String status){
     return widget.taskItem.status! == status;
@@ -136,7 +109,7 @@ class _TaskCardState extends State<TaskCard> {
     _updateTaskStatusInProgress = true;
     setState(() {});
     final response =
-        await NetworkCaller.getRequest(Urls.updateTaskStatus(id, status));
+    await NetworkCaller.getRequest(Urls.updateTaskStatus(id, status));
     _updateTaskStatusInProgress = false;
     if (response.isSuccess) {
       widget.refreshList();
