@@ -1,16 +1,18 @@
 # Task_manager
 
-Ostad_Assignment - 4.
+Ostad_Assignment - 4
 
-## Getting Started
+## Description
+Task Manager is a comprehensive task-managing application developed using Flutter, integrating REST API for seamless data communication. The app is designed to enhance productivity by allowing users to organize tasks efficiently across multiple devices. It supports full CRUD operations (Create, Read, Update, Delete) for task management.
 
-This project is a starting point for a Flutter application.
+## Features
+- Multi-device synchronization
+- Create, Read, Update, and Delete (CRUD) operations for tasks
+- User-friendly interface
+- Efficient state management using GetX
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Technology Used
+- Flutter
+- Dart
+- REST API
+- GetX State Management
